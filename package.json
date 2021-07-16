@@ -1,0 +1,19 @@
+{
+  "name": "@sbsp/portal",
+  "version": "1.0.0",
+  "description": "Data portal for the Society of Black Solar Professionals.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeCorroon/SBSP.git"
+  },
+  "author": "Trevor Ewen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakeCorroon/SBSP/issues"
+  },
+  "homepage": "https://github.com/JakeCorroon/SBSP#readme"
+}
