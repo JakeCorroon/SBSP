@@ -2,7 +2,7 @@
 
 Web server for data visualization for the Society of Black Solar Professionals.
 
-## Getting Started
+## Getting Started - You get started right now
 
 Watch the [onboarding video](https://threadit.app/thread/bsi4anfsl12c78l24cxc/message/d0vpby7if4bmz3nw0is2befi?utm_medium=referral-link) to understand how to use this application.
 
