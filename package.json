@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server/index.js",
     "build": "echo \"There is no build required for this project.\"",
-    "format": "prettier --write './**/*.js'"
+    "format": "prettier --write './**/*.js'",
+    "test-iframe": "static sample"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "handlebars": "^4.7.7",
     "helmet": "^4.6.0",
     "http-errors": "^1.7.2",
+    "node-static": "^0.7.11",
     "quickbase": "^4.2.2"
   },
   "devDependencies": {
