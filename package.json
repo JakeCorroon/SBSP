@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
+    "build": "echo \"There is no build required for this project.\"",
     "format": "prettier --write './**/*.js'"
   },
   "repository": {
