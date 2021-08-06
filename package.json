@@ -7,7 +7,7 @@
     "start": "node server/index.js",
     "build": "echo \"There is no build required for this project.\"",
     "format": "prettier --write './**/*.js'",
-    "test-iframe": "static sample"
+    "test-iframe": "node sample/iframe.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "dependencies": {
     "checkenv": "^1.2.2",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv-extended": "^2.9.0",
     "express": "^4.17.1",
     "fs-extra": "^10.0.0",
