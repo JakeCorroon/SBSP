@@ -12,6 +12,7 @@ async function getJobs() {
   const report = await client.runQuery({ tableId: process.env.QUICKBASE_JOBS_TABLE_ID });
   return report;
 }
+
 async function getRfps() {
   const client = getClient();
   const report = await client.runQuery({ tableId: process.env.QUICKBASE_RFPS_TABLE_ID });

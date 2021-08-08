@@ -8,16 +8,18 @@
 <body>
 <table class="table">
     <thead>
-    {{#each fields}}
-        <th>{{this.label}}</th>
-    {{/each}}
+        <th>Description</th>
+        <th>Link</th>
+        <th>Expiration Date</th>
     </thead>
     <tbody>
     {{#each data}}
         <tr>
-        {{#each this}}
-            <td>{{this.value}}</td>
-        {{/each}}
+            <td>{{this.0.value}}</td>
+            <td>
+                <a href="https://{{this.1.value}}" target="_blank">{{this.1.value}}</a>
+            </td>
+            <td>{{this.2.value}}</td>
         </tr>
     {{/each}}
     </tbody>
