@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "format": "prettier --write './**/*.js'"
+    "build": "echo \"There is no build required for this project.\"",
+    "format": "prettier --write './**/*.js'",
+    "test-iframe": "node sample/iframe.js"
   },
   "repository": {
     "type": "git",
@@ -20,12 +22,14 @@
   "dependencies": {
     "checkenv": "^1.2.2",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv-extended": "^2.9.0",
     "express": "^4.17.1",
     "fs-extra": "^10.0.0",
     "handlebars": "^4.7.7",
     "helmet": "^4.6.0",
     "http-errors": "^1.7.2",
+    "node-static": "^0.7.11",
     "quickbase": "^4.2.2"
   },
   "devDependencies": {
