@@ -7,10 +7,15 @@ const { orderDataByFields } = require('../../utils/quickbase');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const jobs = await getJobs();
+  const { query } = req;
+
+  const jobs = await getJobs(query);
 
   const template = await getView('jobs');
-  const view = Handlebars.compile(template)(orderDataByFields(jobs));
+
+  const orderedData = orderDataByFields(jobs);
+
+  const view = Handlebars.compile(template)(orderedData);
 
   res.status(200).send(view);
 });

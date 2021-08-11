@@ -8,19 +8,88 @@
 <body>
 <table class="table">
     <thead>
-    {{#each fields}}
-        <th>{{this.label}}</th>
-    {{/each}}
+    <th>Company Name</th>
+    <th>Position</th>
+    <th>Level</th>
+    <th>Date Posted</th>
+    <th>Time Posted</th>
     </thead>
     <tbody>
+    <tr>
+        <td></td>
+        <td>
+            <div class="row">
+                <div class="col-xs-9">
+                    <input class="form-control" id="position-filter">
+                </div>
+                <div class="col-xs-3">
+                    <button class="btn btn-block" onclick="onPositionFilter();">Filter</button>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="row">
+                <div class="col-xs-9">
+                    <select class="form-control" id="level-filter">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="col-xs-3">
+                    <button class="btn btn-block" onclick="onLevelFilter();">Filter</button>
+                </div>
+            </div>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
     {{#each data}}
         <tr>
-        {{#each this}}
-            <td>{{this.value}}</td>
-        {{/each}}
+            <td>{{this.0.value}}</td>
+            <td>{{this.1.value}}</td>
+            <td>{{this.2.value}}</td>
+            <td>{{this.3.value}}</td>
+            <td>{{this.4.value}}</td>
         </tr>
     {{/each}}
     </tbody>
 </table>
+
+<script type="text/javascript">
+    function otherFilters(key) {
+        const search = window.location.search;
+        const otherFiltersInSearch = search.replace(/^\?/, '').replace(new RegExp(`${key}=.*?&`, 'g'), '');
+        return otherFiltersInSearch ? `&${otherFiltersInSearch}` : '';
+    }
+
+    function onPositionFilter() {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('position-filter').value;
+        return window.location.replace(href + '?position=' + value + otherFilters('position'));
+    }
+
+    function onLevelFilter() {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('level-filter').value;
+        return window.location.replace(href + '?level=' + value + otherFilters('level'));
+    }
+
+    if (window.location.search) {
+        const searchObject = window.location.search.replace(/^\?/, '').split('&').reduce((acc, keyValue) => {
+            const split = keyValue.split('=');
+            acc[split[0]] = split[1];
+            return acc;
+        }, {});
+
+        if (searchObject.position) {
+            document.getElementById('position-filter').value = searchObject.position;
+        }
+
+        if (searchObject.level) {
+            document.getElementById('level-filter').value = searchObject.level;
+        }
+    }
+</script>
 </body>
 </html>

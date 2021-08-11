@@ -7,9 +7,30 @@ function getClient() {
   });
 }
 
-async function getJobs() {
+const POSITION_FIELD_ID = 7;
+const LEVEL_FIELD_ID = 8;
+
+async function getJobs({ position, level } = {}) {
   const client = getClient();
-  const report = await client.runQuery({ tableId: process.env.QUICKBASE_JOBS_TABLE_ID });
+
+  const statements = [];
+
+  if (position) {
+    statements.push(`{${POSITION_FIELD_ID}.CT.\'${position}\'}`);
+  }
+
+  if (level) {
+    statements.push(`{${LEVEL_FIELD_ID}.EX.\'${level}\'}`);
+  }
+
+  const where = statements.join('AND');
+
+  console.log('Where statement is: ', where);
+
+  const report = await client.runQuery({
+    tableId: process.env.QUICKBASE_JOBS_TABLE_ID,
+    where,
+  });
   return report;
 }
 
