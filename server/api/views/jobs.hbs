@@ -18,28 +18,15 @@
     <tr>
         <td></td>
         <td>
-            <div class="row">
-                <div class="col-xs-9">
-                    <input class="form-control" id="position-filter">
-                </div>
-                <div class="col-xs-3">
-                    <button class="btn btn-block" onclick="onPositionFilter();">Filter</button>
-                </div>
-            </div>
+            <input class="form-control" id="position-filter" onkeyup="onFiltersKeyUp();">
         </td>
         <td>
-            <div class="row">
-                <div class="col-xs-9">
-                    <select class="form-control" id="level-filter">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                </div>
-                <div class="col-xs-3">
-                    <button class="btn btn-block" onclick="onLevelFilter();">Filter</button>
-                </div>
-            </div>
+            <select class="form-control" id="level-filter" onchange="onLevelFilter();">
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </td>
         <td></td>
         <td></td>
@@ -55,32 +42,42 @@
     {{/each}}
     </tbody>
 </table>
-
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
 <script type="text/javascript">
-    function otherFilters(key) {
-        const search = window.location.search;
-        const otherFiltersInSearch = search.replace(/^\?/, '').replace(new RegExp(`${key}=.*?&`, 'g'), '');
-        return otherFiltersInSearch ? `&${otherFiltersInSearch}` : '';
-    }
-
-    function onPositionFilter() {
+    const onFiltersKeyUp = _.debounce(() => {
         const href = window.location.origin + window.location.pathname;
         const value = document.getElementById('position-filter').value;
-        return window.location.replace(href + '?position=' + value + otherFilters('position'));
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            position: value
+        } : removeKey('position'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+    function removeKey(key) {
+        const parsed = parsedSearch();
+        delete parsed[key];
+        return parsed;
+    }
+
+    function parsedSearch() {
+        const search = window.location.search;
+        return Qs.parse(search.replace(/^\?/, ''));
     }
 
     function onLevelFilter() {
         const href = window.location.origin + window.location.pathname;
         const value = document.getElementById('level-filter').value;
-        return window.location.replace(href + '?level=' + value + otherFilters('level'));
+        const newSearch = Qs.stringify(value ? {
+            ...parsedSearch(),
+            level: value
+        } : removeKey('level'));
+        return window.location.replace(href + '?' + newSearch);
     }
 
     if (window.location.search) {
-        const searchObject = window.location.search.replace(/^\?/, '').split('&').reduce((acc, keyValue) => {
-            const split = keyValue.split('=');
-            acc[split[0]] = split[1];
-            return acc;
-        }, {});
+        const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
 
         if (searchObject.position) {
             document.getElementById('position-filter').value = searchObject.position;
