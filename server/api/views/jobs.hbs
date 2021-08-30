@@ -8,19 +8,85 @@
 <body>
 <table class="table">
     <thead>
-    {{#each fields}}
-        <th>{{this.label}}</th>
-    {{/each}}
+    <th>Company Name</th>
+    <th>Position</th>
+    <th>Level</th>
+    <th>Date Posted</th>
+    <th>Time Posted</th>
     </thead>
     <tbody>
+    <tr>
+        <td></td>
+        <td>
+            <input class="form-control" id="position-filter" onkeyup="onFiltersKeyUp();">
+        </td>
+        <td>
+            <select class="form-control" id="level-filter" onchange="onLevelFilter();">
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
     {{#each data}}
         <tr>
-        {{#each this}}
-            <td>{{this.value}}</td>
-        {{/each}}
+            <td>{{this.0.value}}</td>
+            <td>{{this.1.value}}</td>
+            <td>{{this.2.value}}</td>
+            <td>{{this.3.value}}</td>
+            <td>{{this.4.value}}</td>
         </tr>
     {{/each}}
     </tbody>
 </table>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
+<script type="text/javascript">
+    const onFiltersKeyUp = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('position-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            position: value
+        } : removeKey('position'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+    function removeKey(key) {
+        const parsed = parsedSearch();
+        delete parsed[key];
+        return parsed;
+    }
+
+    function parsedSearch() {
+        const search = window.location.search;
+        return Qs.parse(search.replace(/^\?/, ''));
+    }
+
+    function onLevelFilter() {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('level-filter').value;
+        const newSearch = Qs.stringify(value ? {
+            ...parsedSearch(),
+            level: value
+        } : removeKey('level'));
+        return window.location.replace(href + '?' + newSearch);
+    }
+
+    if (window.location.search) {
+        const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
+
+        if (searchObject.position) {
+            document.getElementById('position-filter').value = searchObject.position;
+        }
+
+        if (searchObject.level) {
+            document.getElementById('level-filter').value = searchObject.level;
+        }
+    }
+</script>
 </body>
 </html>

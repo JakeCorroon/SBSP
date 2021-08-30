@@ -10,7 +10,14 @@ router.get('/', async (req, res) => {
   const rfps = await getRfps();
 
   const template = await getView('rfps');
-  const view = Handlebars.compile(template)(orderDataByFields(rfps));
+
+  const orderedData = orderDataByFields(rfps);
+
+  //console.log(orderedData);
+
+  console.log(JSON.stringify(orderedData, null, 2));
+
+  const view = Handlebars.compile(template)(orderedData);
 
   res.status(200).send(view);
 });
