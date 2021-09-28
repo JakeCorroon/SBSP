@@ -15,6 +15,8 @@ router.get('/', async (req, res) => {
 
   const orderedData = orderDataByFields(jobs);
 
+  console.log(JSON.stringify(orderedData, null, 2));
+
   const view = Handlebars.compile(template)(orderedData);
 
   res.status(200).send(view);

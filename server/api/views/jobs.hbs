@@ -4,6 +4,17 @@
     <title>SBSP</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        tr {
+            cursor: pointer;
+        }
+        /*tr:hover {*/
+        /*    background-color: deeppink;*/
+        /*}*/
+        td:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <table class="table">
@@ -13,6 +24,7 @@
     <th>Level</th>
     <th>Date Posted</th>
     <th>Time Posted</th>
+    <th></th>
     </thead>
     <tbody>
     <tr>
@@ -30,14 +42,16 @@
         </td>
         <td></td>
         <td></td>
+        <td><button class="btn btn-primary" onclick="onClearFilters();">Clear Filters</button></td>
     </tr>
     {{#each data}}
-        <tr>
+        <tr onclick="onRowClick(event);" data-link="{{this.9.value}}">
             <td>{{this.0.value}}</td>
             <td>{{this.1.value}}</td>
             <td>{{this.2.value}}</td>
             <td>{{this.3.value}}</td>
             <td>{{this.4.value}}</td>
+            <td>&nbsp;</td>
         </tr>
     {{/each}}
     </tbody>
@@ -74,6 +88,18 @@
             level: value
         } : removeKey('level'));
         return window.location.replace(href + '?' + newSearch);
+    }
+
+    function onRowClick(e) {
+        const dataset = e.target.parentNode.dataset;
+        if (dataset.link) {
+          window.open(dataset.link, '_blank');
+        }
+    }
+
+    function onClearFilters() {
+        const href = window.location.origin + window.location.pathname;
+        return window.location.replace(href);
     }
 
     if (window.location.search) {
