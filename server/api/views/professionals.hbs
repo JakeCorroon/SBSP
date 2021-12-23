@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+    <title>SBSP</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<table class="table">
+    <thead>
+        <th>Full Name</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Type</th>
+        <th>Years of Experience</th>
+        <th>Seeking Opportinities</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td> 
+           <input class="form-control" id="fullname-filter" onkeyup="onFiltersKeyUpFullName();"> 
+        </td>
+        <td>
+           <input class="form-control" id="city-filter" onkeyup="onFiltersKeyUpCity();"> 
+        </td>
+        <td>
+           <input class="form-control" id="state-filter" onkeyup="onFiltersKeyUpState();"> 
+        </td>
+        <td>
+            <select class="form-control" id="type-filter" onchange="onTypeFilter();">
+                <option value=""></option>
+                <option value="Job Seeker">Job Seeker</option>
+                <option value="Professional">Professional</option>
+                <option value="Volunteer">Volunteer</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-control" id="years-filter" onchange="onYearsFilter();">
+                <option value=""></option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="5">5+</option>
+                <option value="10">10+</option>
+                 <option value="15">15+</option>
+            </select>
+        </td>
+        <td>
+             <select class="form-control" id="seeking-filter" onchange="onSeekingFilter();">
+                <option value=""></option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </td>
+        <td></td>
+       <td><button class="btn btn-primary" onclick="onClearFilters();">Clear Filters</button></td>
+    </tr>
+   {{#each data}}
+        <tr onclick="ßonRowClick(event);" data-link="{{lookup this "linkedin"}}">
+            <td>{{lookup this "fullname"}}</td>
+            <td>{{lookup this "city"}}</td>
+            <td>{{lookup this "state"}}</td>  
+            <td>{{lookup this "type"}}</td>     
+            <td>{{lookup this "yearsofexperience"}}</td>     
+            <td>{{lookup this "open for opportunities?"}}</td>     
+            <td>&nbsp;</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
+<script type="text/javascript">
+
+ const onFiltersKeyUpFullName = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('fullname-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            fullname: value
+        } : removeKey('fullname'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+ const onFiltersKeyUpCity = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('city-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            city: value
+        } : removeKey('city'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+const onFiltersKeyUpState = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('state-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            state: value
+        } : removeKey('state'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+const onTypeFilter = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('type-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            type: value
+        } : removeKey('type'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+const onYearsFilter = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('years-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            years: value
+        } : removeKey('years'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+const onSeekingFilter = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('seeking-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            seeking: value
+        } : removeKey('seeking'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+   function removeKey(key) {
+        const parsed = parsedSearch();
+        delete parsed[key];
+        return parsed;
+    }
+
+    function parsedSearch() {
+        const search = window.location.search;
+        return Qs.parse(search.replace(/^\?/, ''));
+    }
+
+function onClearFilters() {
+        const href = window.location.origin + window.location.pathname;
+        return window.location.replace(href);
+    }
+
+
+    if (window.location.search) {
+        const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
+
+         if (searchObject.fullname) {
+            document.getElementById('fullname-filter').value = searchObject.fullname;
+        }
+
+         if (searchObject.city) {
+            document.getElementById('city-filter').value = searchObject.city;
+        }
+
+         if (searchObject.state) {
+            document.getElementById('state-filter').value = searchObject.state;
+        }
+
+         if (searchObject.type) {
+            document.getElementById('type-filter').value = searchObject.type;
+        }
+
+         if (searchObject.years) {
+            document.getElementById('years-filter').value = searchObject.years;
+        }
+
+         if (searchObject.seeking) {
+            document.getElementById('seeking-filter').value = searchObject.seeking;
+        }
+
+    }
+
+</script>
+</body>
+</html>
+
+

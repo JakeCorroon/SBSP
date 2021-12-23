@@ -1,7 +1,7 @@
 const express = require('express');
 const Handlebars = require('handlebars');
 const { getView } = require('../views');
-const { getRfps } = require('../../thirdParty/quickbase');
+const { getProfessionals } = require('../../thirdParty/quickbase');
 const { orderDataByFields } = require('../../utils/quickbase');
 
 const router = express.Router();
@@ -9,15 +9,10 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   const { query } = req;
 
-  const rfps = await getRfps(query);
+  const professionals = await getProfessionals(query);
 
-  const template = await getView('rfps');
-
-  const orderedData = orderDataByFields(rfps);
-
-  console.log(JSON.stringify(orderedData, null, 2));
-
-  const view = Handlebars.compile(template)(orderedData);
+  const template = await getView('professionals');
+  const view = Handlebars.compile(template)(orderDataByFields(professionals));
 
   res.status(200).send(view);
 });

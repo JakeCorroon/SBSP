@@ -8,21 +8,135 @@
 <body>
 <table class="table">
     <thead>
+        <th>Title</th>
         <th>Description</th>
-        <th>Link</th>
+        <th>City</th>
+        <th>State</th>
         <th>Expiration Date</th>
     </thead>
     <tbody>
-    {{#each data}}
-        <tr>
-            <td>{{this.0.value}}</td>
-            <td>
-                <a href="https://{{this.1.value}}" target="_blank">{{this.1.value}}</a>
-            </td>
-            <td>{{this.2.value}}</td>
+            <tr>
+        <td> 
+           <input class="form-control" id="title-filter" onkeyup="onFiltersKeyUpTitle();"> 
+        </td>
+        <td>
+            <input class="form-control" id="description-filter" onkeyup="onFiltersKeyUpDescription();">
+        </td>
+        <td>
+            <input class="form-control" id="city-filter" onkeyup="onFiltersKeyUpCity();">
+        </td>
+        <td>
+            <input class="form-control" id="state-filter" onkeyup="onFiltersKeyUpState();">
+        </td>
+        <td>            
+            <input class="form-control" id="date-posted-filter" type="date" onkeyup="onFiltersKeyUpState();">
+        </td>
+        <td></td>
+        <td></td>
+       <td><button class="btn btn-primary" onclick="onClearFilters();">Clear Filters</button></td>
+    </tr>
+   {{#each data}}
+        <tr onclick="ßonRowClick(event);" data-link="{{lookup this "link"}}">
+            <td>{{lookup this "title"}}</td>
+            <td>{{lookup this "description"}}</td>
+            <td>{{lookup this "city"}}</td>
+            <td>{{lookup this "state"}}</td>
+            <td>{{lookup this "expiration"}}</td>
+            
+            <td>&nbsp;</td>
         </tr>
     {{/each}}
     </tbody>
 </table>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
+<script type="text/javascript">
+
+
+
+ const onFiltersKeyUpTitle = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('title-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            title: value
+        } : removeKey('title'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+ const onFiltersKeyUpDescription = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('description-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            description: value
+        } : removeKey('description'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+ const onFiltersKeyUpCity = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('city-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            city: value
+        } : removeKey('city'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+ const onFiltersKeyUpState = _.debounce(() => {
+        const href = window.location.origin + window.location.pathname;
+        const value = document.getElementById('state-filter').value;
+        const newSearch = Qs.stringify( value ? {
+            ...parsedSearch(),
+            state: value
+        } : removeKey('state'));
+        return window.location.replace(href + '?' + newSearch);
+    }, 500);
+
+   function removeKey(key) {
+        const parsed = parsedSearch();
+        delete parsed[key];
+        return parsed;
+    }
+
+    function parsedSearch() {
+        const search = window.location.search;
+        return Qs.parse(search.replace(/^\?/, ''));
+    }
+
+    function onClearFilters() {
+        const href = window.location.origin + window.location.pathname;
+        return window.location.replace(href);
+    }
+
+
+
+    if (window.location.search) {
+        const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
+
+         if (searchObject.title) {
+            document.getElementById('title-filter').value = searchObject.title;
+        }
+        if (searchObject.description) {
+            document.getElementById('description-filter').value = searchObject.description;
+        }
+        if (searchObject.state) {
+            document.getElementById('state-filter').value = searchObject.state;
+        }
+        if (searchObject.city) {
+            document.getElementById('city-filter').value = searchObject.city;
+        }
+        if (searchObject["date-posted"]) {
+            document.getElementById('date-posted-filter').value = searchObject["date-posted"];
+        }
+
+    }
+
+
+</script>
 </body>
 </html>
+
+
