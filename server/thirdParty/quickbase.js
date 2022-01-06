@@ -1,4 +1,5 @@
 const { QuickBase } = require('quickbase');
+const moment = require('moment');
 
 function getClient() {
   return new QuickBase({
@@ -15,6 +16,7 @@ const INDUSTRY_FIELD_ID = 14;
 const PUBLISH_FIELD_ID = 16;
 const CITY_FIELD_ID = 18;
 const DESCRIPTION_FIELD_ID = 12;
+const DATE_POSTED_FIELD_ID = 9;
 //constants for RFP table:
 const RFPS_PUBLISH_FIELD_ID = 14;
 const RFPS_TITLE_FIELD_ID = 13;
@@ -32,7 +34,7 @@ const PROFESSIONALS_YEARS_FIELD_ID = 11;
 const PROFESSIONALS_SEEKING_FIELD_ID = 12;
 
 
-async function getJobs({ company, position, level, state, city, industry, description } = {}) {
+async function getJobs({ company, position, level, state, city, industry, description, start, end } = {}) {
   const client = getClient();
 
   const statements = [`{${PUBLISH_FIELD_ID}.EX.${true}}`];
@@ -65,7 +67,15 @@ async function getJobs({ company, position, level, state, city, industry, descri
     statements.push(`{${INDUSTRY_FIELD_ID}.EX.\'${industry}\'}`);
   }
 
+  if (start) {
+    const asMoment = moment(start, 'YYYYMMDD')
+    statements.push(`{${DATE_POSTED_FIELD_ID}.GTE.\'${asMoment.format('MM-DD-YYYY')}\'}`);
+  }
 
+  if (end) {
+    const asMoment = moment(end, 'YYYYMMDD')
+    statements.push(`{${DATE_POSTED_FIELD_ID}.LTE.\'${asMoment.format('MM-DD-YYYY')}\'}`);
+  }
 
   const where = statements.join('AND');
 
