@@ -15,6 +15,26 @@
         td:hover {
             text-decoration: underline;
         }
+
+        .table {
+            border-spacing: 0px;
+            border-color: #FFFFFF;
+            border-collapse: separate;
+        }
+
+        .table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #FFFFFF;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table .filter-row td {
+            position: sticky;
+            top: 50px;
+            background-color: #FFFFFF;
+            border-top: 0px;
+        }
     </style>
 </head>
 <body>
@@ -31,7 +51,7 @@
     <th></th>
     </thead>
     <tbody>
-    <tr>
+    <tr class="filter-row">
         <td> 
             <input class="form-control" id="company-filter" onkeyup="onFiltersKeyUpCompany();"></td>
         <td>
