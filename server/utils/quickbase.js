@@ -1,5 +1,10 @@
 function asRowOrderedByField(fields, data) {
-  return fields.map(({ id }) => data[id]);
+  //return fields.map(({ id }) => data[id]);
+  return fields.reduce((acc, field) => {
+    acc[field.label.toLowerCase()] = data[field.id].value;
+    return acc;
+  }, {});
+
 }
 
 function orderDataByFields(table) {
