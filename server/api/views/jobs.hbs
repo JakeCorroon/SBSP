@@ -4,6 +4,7 @@
     <title>SBSP</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/vendor/lightpick.css">
     <style>
         tr {
             cursor: pointer;
@@ -45,7 +46,7 @@
             </select>
         </td>
         <td>
-            <input class="form-control" id="date-posted-filter" type="date" onkeyup="onFiltersKeyUpState();">
+            <input class="form-control" id="date-posted-filter">
         </td>
         <td>
              <input class="form-control" id="state-filter" onkeyup="onFiltersKeyUpState();">
@@ -82,126 +83,66 @@
 </table>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script type="text/javascript" src="/static/assets/js/client.js"></script>
+<script type="text/javascript" src="/static/assets/js/vendor/lightpick.js"></script>
 <script type="text/javascript">
- 
-    const onFiltersKeyUp = _.debounce(() => {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('position-filter').value;
-        const newSearch = Qs.stringify( value ? {
-            ...parsedSearch(),
-            position: value
-        } : removeKey('position'));
-        return window.location.replace(href + '?' + newSearch);
-    }, 500);
+    const onFiltersKeyUp = createKeyUpHandler('position-filter', 'position');
 
-    const onFiltersKeyUpCompany = _.debounce(() => {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('company-filter').value;
-        const newSearch = Qs.stringify( value ? {
-            ...parsedSearch(),
-            company: value
-        } : removeKey('company'));
-        return window.location.replace(href + '?' + newSearch);
-    }, 500);
+    const onFiltersKeyUpCompany = createKeyUpHandler('company-filter', 'company');
 
-    const onFiltersKeyUpState = _.debounce(() => {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('state-filter').value;
-        const newSearch = Qs.stringify( value ? {
-            ...parsedSearch(),
-            state: value
-        } : removeKey('state'));
-        return window.location.replace(href + '?' + newSearch);
-    }, 500);
+    const onFiltersKeyUpState = createKeyUpHandler('state-filter', 'state');
 
-     const onFiltersKeyUpCity = _.debounce(() => {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('city-filter').value;
-        const newSearch = Qs.stringify( value ? {
-            ...parsedSearch(),
-            city: value
-        } : removeKey('city'));
-        return window.location.replace(href + '?' + newSearch);
-    }, 500);
+    const onFiltersKeyUpCity = createKeyUpHandler('city-filter', 'city');
 
-        const onFiltersKeyUpDescription= _.debounce(() => {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('description-filter').value;
-        const newSearch = Qs.stringify( value ? {
-            ...parsedSearch(),
-            description: value
-        } : removeKey('description'));
-        return window.location.replace(href + '?' + newSearch);
-    }, 500);
+    const onLevelFilter = createKeyUpHandler('level-filter', 'level', 0);
 
-    function removeKey(key) {
-        const parsed = parsedSearch();
-        delete parsed[key];
-        return parsed;
-    }
+    const onIndustryFilter = createKeyUpHandler('industry-filter', 'industry', 0);
 
-    function parsedSearch() {
-        const search = window.location.search;
-        return Qs.parse(search.replace(/^\?/, ''));
-    }
+    const onFiltersKeyUpDescription = createKeyUpHandler('description-filter', 'description');
 
-    function onLevelFilter() {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('level-filter').value;
-        const newSearch = Qs.stringify(value ? {
-            ...parsedSearch(),
-            level: value
-        } : removeKey('level'));
-        return window.location.replace(href + '?' + newSearch);
-    }
-
-    function onIndustryFilter() {
-        const href = window.location.origin + window.location.pathname;
-        const value = document.getElementById('industry-filter').value;
-        const newSearch = Qs.stringify(value ? {
-            ...parsedSearch(),
-            industry: value
-        } : removeKey('industry'));
-        return window.location.replace(href + '?' + newSearch);
-    }
-
-    function onRowClick(e) {
-        const dataset = e.target.parentNode.dataset;
-        if (dataset.link) {
-          window.open(dataset.link, '_blank');
-        }
-    }
-
-    function onClearFilters() {
-        const href = window.location.origin + window.location.pathname;
-        return window.location.replace(href);
-    }
-
+    let startDate, endDate;
     if (window.location.search) {
-        const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
+        const searchObject = initializeFromSearch({
+            company: 'company-filter',
+            position: 'position-filter',
+            state: 'state-filter',
+            city: 'city-filter',
+            level: 'level-filter',
+            industry: 'industry-filter',
+            description: 'description-filter'
+        });
 
-         if (searchObject.company) {
-            document.getElementById('company-filter').value = searchObject.company;
+        if (searchObject.start) {
+            startDate = moment(searchObject.start, 'YYYYMMDD');
         }
-        if (searchObject.position) {
-            document.getElementById('position-filter').value = searchObject.position;
-        }
-        if (searchObject.state) {
-            document.getElementById('state-filter').value = searchObject.state;
-        }
-        if (searchObject.city) {
-            document.getElementById('city-filter').value = searchObject.city;
-        }
-        if (searchObject.level) {
-            document.getElementById('level-filter').value = searchObject.level;
-        }
-        if (searchObject.industry) {
-            document.getElementById('industry-filter').value = searchObject.industry;
-        }
-        if (searchObject.description) {
-            document.getElementById('description-filter').value = searchObject.description;
+        if (searchObject.end) {
+            endDate = moment(searchObject.end, 'YYYYMMDD');
         }
     }
+
+    const datePosted = new Lightpick({
+        field: document.getElementById('date-posted-filter'),
+        format: 'MM/DD/YYYY',
+        singleDate: false,
+        repick: true,
+        startDate,
+        endDate,
+        onSelect: (start, end) => {
+          if (start && end) {
+              const href = window.location.origin + window.location.pathname;
+              const newQuery = {};
+              if (start && start.isValid()) {
+                  newQuery.start = start.format('YYYYMMDD');
+              }
+              if (end && end.isValid()) {
+                  newQuery.end = end.format('YYYYMMDD');
+              }
+              const newSearch = Qs.stringify(newQuery);
+              return window.location.replace(href + '?' + newSearch);
+          }
+        }
+    });
 </script>
 </body>
 </html>
