@@ -5,44 +5,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/assets/css/vendor/lightpick.css">
-    <style>
-        tr {
-            cursor: pointer;
-        }
-        /*tr:hover {*/
-        /*    background-color: deeppink;*/
-        /*}*/
-        td:hover {
-            text-decoration: underline;
-        }
-
-        .table {
-            border-spacing: 0px;
-            border-color: #FFFFFF;
-            border-collapse: separate;
-        }
-
-        .table thead th {
-            position: sticky;
-            top: 0;
-            background-color: #FFFFFF;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .table .filter-row td {
-            position: sticky;
-            top: 50px;
-            background-color: #FFFFFF;
-            border-top: 0px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/style.css">
 </head>
 <body>
 <table class="table">
     <thead>
     <th>Company Name</th>
     <th>Position</th>
-    <th>Level</th>
+    <th>Years of Experience</th>
     <th>Date Posted</th>
     <th>State</th>
     <th>City</th>
@@ -60,13 +30,15 @@
         <td>
             <select class="form-control" id="level-filter" onchange="onLevelFilter();">
                 <option value=""></option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="5">5+</option>
+                <option value="10">10+</option>
+                <option value="15">15+</option>
             </select>
         </td>
         <td>
-            <input class="form-control" id="date-posted-filter">
+            <!-- <input class="form-control" id="date-posted-filter"> -->
         </td>
         <td>
              <input class="form-control" id="state-filter" onkeyup="onFiltersKeyUpState();">
@@ -90,7 +62,7 @@
         <tr onclick="onRowClick(event);" data-link="{{lookup this "link"}}">
             <td>{{lookup this "company name"}}</td>
             <td>{{lookup this "position"}}</td>
-            <td>{{lookup this "level"}}</td>
+            <td>{{lookup this "experience"}}</td>
             <td>{{lookup this "date posted"}}</td>
             <td>{{lookup this "state"}}</td>
             <td>{{lookup this "city"}}</td>

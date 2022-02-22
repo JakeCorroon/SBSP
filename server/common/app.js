@@ -24,8 +24,6 @@ app.use('/', genericController);
 app.use('/static', express.static(path.join(root, 'public')));
 app.use('/*', genericController);
 
-
-
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
 

@@ -33,12 +33,21 @@ const PROFESSIONALS_TYPE_FIELD_ID = 13;
 const PROFESSIONALS_YEARS_FIELD_ID = 11;
 const PROFESSIONALS_SEEKING_FIELD_ID = 12;
 
-
-async function getJobs({ company, position, level, state, city, industry, description, start, end } = {}) {
+async function getJobs({
+  company,
+  position,
+  level,
+  state,
+  city,
+  industry,
+  description,
+  start,
+  end,
+} = {}) {
   const client = getClient();
 
   const statements = [`{${PUBLISH_FIELD_ID}.EX.${true}}`];
-   
+
   if (company) {
     statements.push(`{${COMPANY_FIELD_ID}.CT.\'${company}\'}`);
   }
@@ -56,7 +65,7 @@ async function getJobs({ company, position, level, state, city, industry, descri
   }
 
   if (level) {
-    statements.push(`{${LEVEL_FIELD_ID}.EX.\'${level}\'}`);
+    statements.push(`{${LEVEL_FIELD_ID}.GTE.\'${level}\'}`);
   }
 
   if (description) {
@@ -68,12 +77,12 @@ async function getJobs({ company, position, level, state, city, industry, descri
   }
 
   if (start) {
-    const asMoment = moment(start, 'YYYYMMDD')
+    const asMoment = moment(start, 'YYYYMMDD');
     statements.push(`{${DATE_POSTED_FIELD_ID}.GTE.\'${asMoment.format('MM-DD-YYYY')}\'}`);
   }
 
   if (end) {
-    const asMoment = moment(end, 'YYYYMMDD')
+    const asMoment = moment(end, 'YYYYMMDD');
     statements.push(`{${DATE_POSTED_FIELD_ID}.LTE.\'${asMoment.format('MM-DD-YYYY')}\'}`);
   }
 
@@ -86,11 +95,11 @@ async function getJobs({ company, position, level, state, city, industry, descri
     where,
   });
   return report;
-} 
+}
 
-async function getRfps({ title,description, city, state, expiration  } = {}) {
+async function getRfps({ title, description, city, state, expiration } = {}) {
   const client = getClient();
-  
+
   const statements = [`{${RFPS_PUBLISH_FIELD_ID}.EX.${true}}`];
 
   if (title) {
@@ -116,7 +125,7 @@ async function getRfps({ title,description, city, state, expiration  } = {}) {
   const where = statements.join('AND');
 
   console.log('Where statement is: ', where);
-  const report = await client.runQuery({ 
+  const report = await client.runQuery({
     tableId: process.env.QUICKBASE_RFPS_TABLE_ID,
     where,
   });
@@ -135,41 +144,39 @@ async function getVolunteers() {
   return report;
 }
 
-async function getProfessionals({fullname, city, state, type, years, seeking } = {}) {
+async function getProfessionals({ fullname, city, state, type, years, seeking } = {}) {
   const client = getClient();
-  
+
   const statements = [`{${PROFESSIONALS_PUBLISH_FIELD_ID}.EX.${true}}`];
 
   if (fullname) {
-   statements.push(`{${PROFESSIONALS_FULLNAME_FIELD_ID}.CT.\'${fullname}\'}`);
- }
+    statements.push(`{${PROFESSIONALS_FULLNAME_FIELD_ID}.CT.\'${fullname}\'}`);
+  }
 
- if (city) {
-  statements.push(`{${PROFESSIONALS_CITY_FIELD_ID}.CT.\'${city}\'}`);
-}
+  if (city) {
+    statements.push(`{${PROFESSIONALS_CITY_FIELD_ID}.CT.\'${city}\'}`);
+  }
 
-if (state) {
-  statements.push(`{${PROFESSIONALS_STATE_FIELD_ID}.CT.\'${state}\'}`);
-}
+  if (state) {
+    statements.push(`{${PROFESSIONALS_STATE_FIELD_ID}.CT.\'${state}\'}`);
+  }
 
-if (type) {
-  statements.push(`{${PROFESSIONALS_TYPE_FIELD_ID}.CT.\'${type}\'}`);
-}
+  if (type) {
+    statements.push(`{${PROFESSIONALS_TYPE_FIELD_ID}.CT.\'${type}\'}`);
+  }
 
-if (years) {
-  statements.push(`{${PROFESSIONALS_YEARS_FIELD_ID}.GTE.\'${years}\'}`);
-}
+  if (years) {
+    statements.push(`{${PROFESSIONALS_YEARS_FIELD_ID}.GTE.\'${years}\'}`);
+  }
 
-if (seeking) {
-  statements.push(`{${PROFESSIONALS_SEEKING_FIELD_ID}.GTE.\'${seeking}\'}`);
-}
-
-
+  if (seeking) {
+    statements.push(`{${PROFESSIONALS_SEEKING_FIELD_ID}.GTE.\'${seeking}\'}`);
+  }
 
   const where = statements.join('AND');
 
   console.log('Where statement is: ', where);
-  const report = await client.runQuery({ 
+  const report = await client.runQuery({
     tableId: process.env.QUICKBASE_PROFESSIONALS_TABLE_ID,
     where,
   });

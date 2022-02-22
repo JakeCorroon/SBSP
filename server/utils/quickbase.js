@@ -4,7 +4,6 @@ function asRowOrderedByField(fields, data) {
     acc[field.label.toLowerCase()] = data[field.id].value;
     return acc;
   }, {});
-
 }
 
 function orderDataByFields(table) {

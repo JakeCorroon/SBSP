@@ -1,0 +1,56 @@
+/* Sample Color Palette */
+:root {
+    --sbsp-red: #891A0B;
+    --sbsp-yellow: 254,250,224;
+    --sbsp-black: #000000;
+}
+
+body {
+    background: rgb(var(--sbsp-yellow));
+    color: var(--sbsp-black);
+}
+
+/* Bootstrap Overrides */
+.btn-primary, .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: var(--sbsp-red);
+    border-color: var(--sbsp-red);
+}
+
+.btn-primary:hover {
+    background-color: var(--sbsp-black);
+}
+
+.form-control {
+    background-color: ivory;
+}
+
+/* Table Styles */
+
+tr {
+    cursor: pointer;
+}
+
+td:hover {
+    text-decoration: underline;
+}
+
+.table {
+    border-spacing: 0px;
+    border-color: #FFFFFF;
+    border-collapse: separate;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    color: var(--sbsp-red);
+    background-color: rgb(var(--sbsp-yellow));
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table .filter-row td {
+    position: sticky;
+    top: 50px;
+    background-color: rgb(var(--sbsp-yellow));
+    border-top: 0px;
+}
