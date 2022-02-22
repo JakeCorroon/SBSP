@@ -13,10 +13,14 @@ function createKeyUpHandler(elementId, queryKey, debounceTime = 500) {
   const method = () => {
     const href = window.location.origin + window.location.pathname;
     const value = document.getElementById(elementId).value;
-    const newSearch = Qs.stringify( value ? {
-      ...parsedSearch(),
-      [queryKey]: value
-    } : removeKey(queryKey));
+    const newSearch = Qs.stringify(
+      value
+        ? {
+            ...parsedSearch(),
+            [queryKey]: value,
+          }
+        : removeKey(queryKey),
+    );
     return window.location.replace(href + '?' + newSearch);
   };
   if (debounceTime && debounceTime > 0) {
@@ -37,7 +41,7 @@ function onClearFilters() {
   return window.location.replace(href);
 }
 
-function initializeFromSearch (mapping) {
+function initializeFromSearch(mapping) {
   const searchObject = Qs.parse(window.location.search.replace(/^\?/, ''));
   Object.keys(mapping).forEach((key) => {
     const elementId = mapping[key];
